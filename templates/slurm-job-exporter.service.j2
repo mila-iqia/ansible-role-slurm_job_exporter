@@ -1,0 +1,17 @@
+[Unit]
+Description=Slurm-job-exporter
+After=network.target
+
+[Service]
+Type=simple
+{% if ansible_facts['os_family'] == 'Debian' %}
+EnvironmentFile=-/etc/default/slurm-job-exporter
+{% else %}
+EnvironmentFile=-/etc/sysconfig/slurm-job-exporter.conf
+{% endif %}
+ExecStart=/usr/bin/python3 {{ slurm_job_exporter_path }}/slurm-job-exporter.py
+PIDFile=/var/run/slurm-job-exporter.pid
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

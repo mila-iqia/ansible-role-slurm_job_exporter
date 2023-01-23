@@ -1,0 +1,40 @@
+---
+- name: Install dependencies
+  ansible.builtin.apt:
+    name:
+      - python3-prometheus-client
+      - python3-psutil
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Clone slurm-job-exporter repo
+  ansible.builtin.git:
+    repo: "{{ slurm_job_exporter_git_repo }}"
+    dest: /var/tmp/slurm-job-exporter
+    version: "{{ slurm_job_exporter_version }}"
+
+- name: "Ensure destination path exists: {{ slurm_job_exporter_path }}"
+  ansible.builtin.file:
+    path: "{{ slurm_job_exporter_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0750
+
+- name: Install slurm-job-exporter.py
+  ansible.builtin.copy:
+    src: /var/tmp/slurm-job-exporter/slurm-job-exporter.py
+    dest: "{{ slurm_job_exporter_path }}/slurm-job-exporter.py"
+    remote_src: true
+    owner: root
+    group: root
+    mode: 0640
+  notify: Restart slurm-job-exporter
+
+- name: Install slurm-job-exporter.service
+  ansible.builtin.template:
+    src: slurm-job-exporter.service.j2
+    dest: /etc/systemd/system/slurm-job-exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart slurm-job-exporter

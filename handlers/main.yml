@@ -1,0 +1,7 @@
+---
+- name: Restart slurm-job-exporter
+  ansible.builtin.systemd:
+    name: slurm-job-exporter.service
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
