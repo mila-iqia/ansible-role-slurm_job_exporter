@@ -2,3 +2,4 @@
 slurm_job_exporter_git_repo: "https://github.com/guilbaults/slurm-job-exporter.git"
 slurm_job_exporter_path: "/opt/slurm-job-exporter"
 slurm_job_exporter_version: "v0.0.12"
+slurm_job_exporter_arguments: ""
