@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
+Environment="PATH={{ slurm_job_exporter_path }}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 {% if ansible_facts['os_family'] == 'Debian' %}
 EnvironmentFile=-/etc/default/slurm-job-exporter
 {% else %}

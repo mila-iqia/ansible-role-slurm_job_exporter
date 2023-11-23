@@ -30,6 +30,15 @@
     mode: 0640
   notify: Restart slurm-job-exporter
 
+- name: Install get_gpus.sh
+  ansible.builtin.copy:
+    src: /var/tmp/slurm-job-exporter/get_gpus.sh
+    dest: "{{ slurm_job_exporter_path }}/get_gpus.sh"
+    remote_src: true
+    owner: root
+    group: root
+    mode: 0750
+
 - name: Install slurm-job-exporter.service
   ansible.builtin.template:
     src: slurm-job-exporter.service.j2
