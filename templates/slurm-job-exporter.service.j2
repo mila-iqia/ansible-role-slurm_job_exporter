@@ -3,6 +3,8 @@ Description=Slurm-job-exporter
 After=network.target
 After=nvidia-dcgm.service
 Wants=nvidia-dcgm.service
+StartLimitIntervalSec=125
+StartLimitBurst=4
 
 [Service]
 Type=simple
@@ -15,6 +17,8 @@ EnvironmentFile=-/etc/sysconfig/slurm-job-exporter.conf
 ExecStart=/usr/bin/python3 {{ slurm_job_exporter_path }}/slurm-job-exporter.py {{ slurm_job_exporter_arguments }}
 PIDFile=/var/run/slurm-job-exporter.pid
 KillMode=process
+RestartSec=30
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
