@@ -1,0 +1,15 @@
+---
+- name: Prepare
+  hosts: all
+
+  tasks:
+    - name: "Update APT cache"
+      ansible.builtin.apt:
+        update_cache: True
+      when: ansible_facts.os_family == "Debian"
+
+    - name: "Install git"
+      ansible.builtin.apt:
+        name: git
+        state: latest
+      when: ansible_facts.os_family == "Debian"
