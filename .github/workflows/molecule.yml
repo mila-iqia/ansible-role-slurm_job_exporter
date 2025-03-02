@@ -1,0 +1,41 @@
+---
+name: slurm_job_exporter unit testing
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    # Every Monday at 7:47 EST
+    - cron: "47 11 * * 1"
+
+jobs:
+  molecule:
+    name: ${{ matrix.distro }} - Molecule tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - ubuntu2204
+          - ubuntu2404
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          path: 'slurm_job_exporter'
+
+      - name: Setup python environment
+        uses: actions/setup-python@v5
+
+      - name: Install test dependencies
+        run: pip3 install tox
+
+      - name: Run molecule tests
+        run: tox
+        working-directory: slurm_job_exporter
+        env:
+          MOLECULE_DISTRO: ${{ matrix.distro }}
+          PY_COLORS: 1
+          ANSIBLE_FORCE_COLOR: 1
